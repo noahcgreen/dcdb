@@ -1,0 +1,19 @@
+characters:
+    BS.Martian Manhunter
+
+starters:
+    BS.Catwoman: 3
+    BS.Gorilla Grodd: 2
+
+kicks:
+    Common.Kick: 16
+
+weaknesses:
+    Common.Weakness: 20
+
+super_villains:
+    middle:
+        Common.Weakness: 10
+
+main_deck:
+    Common.Weakness: 10

@@ -1,0 +1,40 @@
+---
+name: Batmobile
+type: equipment
+color: gray
+cost: 2
+vp: 1
+---
+
+local constant_power = self:set_constant_power(1)
+
+function is_first_played(player)
+    for i, event in ipairs(game.events) do
+        if event.type == Event.PLAY and event.player == player then
+            return false
+        end
+    end
+    return true
+end
+
+function mulligan(player)
+    local hand = {}
+    for i, card in ipairs(player.hand) do
+        table.insert(hand, card:handle())
+    end
+    for i, handle in ipairs(hand) do
+        handle:discard(player)
+        handle:release()
+    end
+    player:draw(5)
+end
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+
+    if is_first_played(player) then
+        mulligan(player)
+    else
+        self:power(player, constant_power)
+    end
+end)

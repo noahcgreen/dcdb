@@ -1,0 +1,28 @@
+---
+name: Starro
+type: villain
+color: red
+cost: 7
+vp: 2
+---
+
+function resolve_attack(attacker, target, defended)
+    if defended then return end
+
+    local card = target.deck[1]
+    if not card then return end
+    local handle = card:handle()
+    handle:discard(target)
+    if card.type & Type.LOCATION == Type.NONE then
+        handle:play(attacker)
+    end
+    handle:release()
+end
+
+local attack = self:set_attack{
+    individual=resolve_attack
+}
+
+self:on_play(function(player)
+    self:attack(player, attack, player.foes)
+end)

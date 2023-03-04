@@ -1,0 +1,30 @@
+---
+name: Lex Luthor
+type: super_villain
+color: red
+cost: 10
+vp: 5
+---
+
+self:set_faa{
+    individual=function(target, defended)
+        if defended then return end
+
+        local villains = 0
+        for i, card in ipairs(game.line_up) do
+            if card.type & Type.VILLAIN == Type.VILLAIN then
+                villains = villains + 1
+            end
+        end
+        for i = 1, villains do
+            if #game.weaknesses == 0 then break end
+            local handle = game.weaknesses[1]:handle()
+            handle:gain(target)
+            handle:release()
+        end
+    end
+}
+
+self:on_play(function(player)
+    player:draw(3)
+end)

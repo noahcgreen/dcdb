@@ -1,0 +1,43 @@
+---
+name: High-Tech Hero
+type: hero
+color: blue
+cost: 3
+vp: 1
+---
+
+function type_matches(card)
+    local valid = Type.EQUIPMENT | Type.SUPER_POWER
+    return card.type & valid ~= Type.NONE
+end
+
+function look_behind(player)
+    for i, event in ipairs(game.events) do
+        if event.type == Event.PLAY and type_matches(event.card) then
+            return true
+        end
+    end
+    return false
+end
+
+self:set_constant_power(1)
+
+self:on_play(function(player)
+    if look_behind(player) then
+        self:power(player, 3)
+    else
+        self:power(player, 1)
+        local look_ahead = self:trigger{
+            type=Event.PLAY,
+            max_uses=1,
+            is_immediate=true,
+            responds=function(event, controller)
+                return event.player == controller and type_matches(event.card)
+            end,
+            activate=function(event, controller)
+                self:power(controller, 2)
+            end
+        }
+        self:bind(look_ahead, player)
+    end
+end)

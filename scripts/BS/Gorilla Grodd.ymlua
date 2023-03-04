@@ -1,0 +1,13 @@
+---
+name: Gorilla Grodd
+type: villain
+color: red
+cost: 5
+vp: 2
+---
+
+local constant_power = self:set_constant_power(3)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)

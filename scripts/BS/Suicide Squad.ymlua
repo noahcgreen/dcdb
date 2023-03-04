@@ -1,0 +1,45 @@
+---
+name: Suicide Squad
+type: villain
+color: red
+cost: 4
+vp: 3
+---
+
+local constant_power = self:set_constant_power(2)
+
+function event_filter(event, player)
+    return event.type == Event.PLAY
+        and event.player == player
+        and event.card:has_name('Suicide Squad')
+        and event.card ~= self
+end
+
+function discard_hand(player)
+    local cards = {}
+    for i, card in ipairs(player.hand) do
+        table.insert(cards, card:handle())
+    end
+    for i, handle in ipairs(cards) do
+        handle:discard()
+    end
+end
+
+function have_played_others(player)
+    local count = 0
+    for i, event in ipairs(game.events) do
+        if event_filter(event, player) then
+            count = count + 1
+        end
+    end
+    return count >= 2
+end
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+    if have_played_others(player) then
+        for i, foe in ipairs(player.foes) do
+            discard_hand(foe)
+        end
+    end
+end)

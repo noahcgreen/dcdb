@@ -1,0 +1,18 @@
+---
+name: The Flash
+type: super_hero
+---
+
+local trigger = self:trigger{
+    type=Event.DRAW,
+    max_uses=1,
+    responds=function(event, controller)
+        local ancestor = event:ancestor(Event.ABILITY)
+        return event.player == controller and event.amount >= 1 and ancestor and dctype(ancestor.owner) == 'Card'
+    end,
+    activate=function(event, controller)
+        controller:draw(1)
+    end
+}
+
+self:bind(trigger)

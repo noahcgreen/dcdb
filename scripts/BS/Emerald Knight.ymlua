@@ -1,0 +1,37 @@
+---
+name: Emerald Knight
+type: hero
+color: blue
+cost: 5
+vp: 1
+---
+
+function type_matches(card)
+    local valid = Type.EQUIPMENT | Type.HERO | Type.SUPER_POWER
+    return card.type & valid ~= Type.NONE
+end
+
+self:on_play(function(player)
+    local cards = {}
+    for i, card in ipairs(game.line_up) do
+        if type_matches(card) then
+            table.insert(cards, card)
+        end
+    end
+    if #cards == 0 then return end
+    local card = player:select(cards, false, 'Play an Equipment, Hero, or Super Power in the Line-Up')
+    local handle = card:handle()
+    local return_to_line_up = self:trigger{
+        type=Event.TURN_END,
+        max_uses=1,
+        preemptive=true,
+        responds=function(event, controller)
+            return true
+        end,
+        activate=function(event, controller)
+            handle:move(game.line_up)
+        end
+    }
+    self:bind(return_to_line_up, player)
+    handle:play(player)
+end)

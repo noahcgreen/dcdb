@@ -1,0 +1,24 @@
+---
+name: Bizarro
+type: villain
+color: red
+cost: 7
+vp: 3
+---
+
+local constant_power = self:set_constant_power(3)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)
+
+self:set_star_vp(function(player)
+    if not game.is_over then return 0 end
+    local count = 0
+    for i, card in ipairs(player.deck) do
+        if card.type == Type.WEAKNESS then
+            count = count + 1
+        end
+    end
+    return count * 2
+end)

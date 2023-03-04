@@ -1,0 +1,66 @@
+---
+name: The Joker
+type: super_villain
+color: red
+cost: 10
+vp: 5
+---
+
+function contains(t, value)
+    for i, v in ipairs(t) do
+        if v == value then
+            return true
+        end
+    end
+    return false
+end
+
+function next_foe(player, victims)
+    for i, foe in ipairs(player.foes) do
+        if contains(victims, foe) then
+            return foe
+        end
+    end
+    return player
+end
+
+local constant_power = self:set_constant_power(2)
+
+self:set_faa{
+    group=function(victims, defenders)
+        local cards = {}
+        for i, victim in ipairs(victims) do
+            if #victim.hand > 0 then
+                local card = victim:select(victim.hand, false, 'Select a card to pass')
+                cards[next_foe(victim, victims)] = card
+            end
+        end
+        for i, victim in ipairs(victims) do
+            local card = cards[victim]
+            local handle = card:handle()
+            handle:move(victim.discard)
+            handle:release()
+            if card.cost >= 1 and #game.weaknesses > 0 then
+                handle = game.weaknesses[1]:handle()
+                handle:gain(victim)
+                handle:release()
+            end
+        end
+    end
+}
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+    for i, foe in ipairs(player.foes) do
+        local options = { 'Let opponent draw', 'Discard a random card' }
+        local choice = foe:select(options, false, 'Let opponent draw, or discard a random card')
+        if choice == options[1] then
+            player:draw(1)
+        else
+            local card = foe.hand[math.random(#foe.hand)]
+            local handle = card:handle()
+            handle:discard(foe)
+            handle:release()
+        end
+    end
+end)

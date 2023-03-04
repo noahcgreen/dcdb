@@ -1,0 +1,49 @@
+---
+name: Sinestro
+type: super_villain
+color: red
+cost: 10
+vp: 5
+---
+
+function is_hero(card)
+    return card.type & Type.HERO == Type.HERO
+end
+
+self:set_faa{
+    individual=function(target, defended)
+        if defended or #target.hand == 0 then return end
+
+        for i, card in ipairs(target.hand) do
+            local handle = card:handle()
+            handle:reveal(nil, target)
+            handle:release()
+        end
+        local heroes = 0
+        for i, card in ipairs(target.hand) do
+            if is_hero(card) then
+                heroes = heroes + 1
+            end
+        end
+        for i = 1, heroes do
+            local card = target:select(target.hand, false, 'Discard a card for each Hero in your hand')
+            local handle = card:handle()
+            handle:discard(target)
+            handle:release()
+        end
+    end
+}
+
+self:on_play(function(player)
+    local card = game.main_deck[1]
+    if not card then return end
+    local handle = card:handle()
+    handle:reveal(nil, player)
+    if is_hero(card) then
+        self:power(player, 3)
+        handle:destroy(player)
+    else
+        handle:gain(player, player.hand)
+    end
+    handle:release()
+end)

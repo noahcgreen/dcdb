@@ -1,0 +1,43 @@
+---
+name: Black Manta
+type: super_villain
+color: red
+cost: 8
+vp: 4
+---
+
+local constant_power = self:set_constant_power(3)
+
+self:set_faa{
+    individual=function(target, defended)
+        if defended then return end
+
+        local card = target.deck[1]
+        if not card then return end
+        local handle = card:handle()
+        handle:discard(target)
+        if card.cost >= 1 then
+            local options = { 'Destroy ' .. card.name, 'Discard your hand' }
+            local choice = target:select(options, false, 'Destroy ' .. card.name .. ' or discard your hand')
+            if choice == options[1] then
+                handle:destroy(target)
+                handle:release()
+            else
+                handle:release()
+                local cards = {}
+                for i, card in ipairs(target.hand) do
+                    table.insert(cards, card:handle())
+                end
+                for i, handle in ipairs(cards) do
+                    handle:discard()
+                    handle:release()
+                end
+            end
+        end
+    end
+}
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+    player:draw(1)
+end)

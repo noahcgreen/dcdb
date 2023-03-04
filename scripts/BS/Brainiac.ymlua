@@ -1,0 +1,58 @@
+---
+name: Brainiac
+type: super_villain
+color: red
+cost: 11
+vp: 6
+---
+
+function remove(t, value)
+    for i, v in ipairs(t) do
+        if v == value then
+            table.remove(t, i)
+            return
+        end
+    end
+end
+
+self:set_faa{
+    group=function(victims, defenders)
+        if #victims < 2 then return end
+
+        local cards = {}
+        for i, victim in ipairs(victims) do
+            local choices = {}
+            for i, card in ipairs(victim.hand) do
+                table.insert(choices, card)
+            end
+            for i = 1, 2 do
+                if #choices == 0 then break end
+                local choice = victim:select(choices, false, 'Select cards to pass')
+                table.insert(cards, choice:handle())
+                remove(choices, choice)
+            end
+        end
+        for i, victim in ipairs(victims) do
+            for i = 1, 2 do
+                if #cards == 0 then break end
+                local handle = cards[math.random(#cards)]
+                remove(cards, handle)
+                handle:move(victim.hand)
+                handle:release()
+            end
+        end
+    end
+}
+
+self:on_play(function(player)
+    for i, foe in ipairs(player.foes) do
+        if #foe.hand == 0 then return end
+        local card = foe.hand[math.random(#foe.hand)]
+        local handle = card:handle()
+        self:reveal({ card })
+        if card.type & Type.LOCATION == Type.NONE then
+            handle:play(player)
+            handle:release()
+        end
+    end
+end)

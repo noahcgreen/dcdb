@@ -1,0 +1,24 @@
+---
+name: Crimson Whirlwind
+type: hero
+color: blue
+cost: 5
+vp: 1
+---
+
+local constant_power = self:set_constant_power(2)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+    local choice = player:select({ 'Yes', 'No' }, false, 'You may put your deck into your discard pile')
+    if choice then
+        handles = {}
+        for i, card in ipairs(player.deck) do
+            table.insert(handles, card:handle())
+        end
+        for i, handle in ipairs(handles) do
+            handle:move(player.discard, game.players)
+            handle:release()
+        end
+    end
+end)

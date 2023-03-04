@@ -1,0 +1,15 @@
+starters:
+    Common.Kick: 10
+
+kicks:
+    Common.Weakness: 1
+
+weaknesses:
+    Common.Weakness: 1
+
+super_villains:
+    top:
+        Common.Weakness: 1
+
+main_deck:
+    Common.Weakness: 5

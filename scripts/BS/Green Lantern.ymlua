@@ -1,0 +1,40 @@
+---
+name: Green Lantern
+type: super_hero
+---
+
+function is_distinct(card, others)
+    for i, other in ipairs(others) do
+        if card:is_copy_of(other) then
+            return false
+        end
+    end
+    return true
+end
+
+function get_distinct(event, controller)
+    local distinct = { event.card }
+    for i, prev_event in ipairs(game.events) do
+        if prev_event.type == Event.PLAY
+            and prev_event.player == controller
+            and prev_event.card.cost >= 1
+            and is_distinct(prev_event.card, distinct)
+        then
+            table.insert(distinct, prev_event.card)
+        end
+    end
+    return distinct
+end
+
+local trigger = self:trigger{
+    type=Event.PLAY,
+    max_uses=1,
+    responds=function(event, controller)
+        return event.player == controller and event.card.cost >= 1 and #get_distinct(event, controller) >= 3
+    end,
+    activate=function(event, controller)
+        self:power(controller, 3)
+    end
+}
+
+self:bind(trigger)

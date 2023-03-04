@@ -1,0 +1,11 @@
+---
+name: The Fastest Man Alive
+type: hero
+color: blue
+cost: 5
+vp: 1
+---
+
+self:on_play(function(player)
+    player:draw(2)
+end)

@@ -1,0 +1,21 @@
+---
+name: Hawkgirl
+type: hero
+color: blue
+cost: 2
+vp: 1
+---
+
+local constant_power = self:set_constant_power(1)
+
+self:on_play(function(player)
+    self:power(player, function()
+        local heroes = 0
+        for i, card in ipairs(player.discard) do
+            if card.type & Type.HERO == Type.HERO then
+                heroes += 1
+            end
+        end
+        return heroes + 1
+    end)
+end)

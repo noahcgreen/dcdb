@@ -1,0 +1,46 @@
+---
+name: Superman
+type: super_hero
+---
+
+local played = {}
+
+local clear_played = self:trigger{
+    type=Event.TURN_END,
+    responds=function(event, controller)
+        return true
+    end,
+    activate=function(event, controller)
+        played = {}
+    end
+}
+
+function is_super_power(card)
+    return card.type & Type.SUPER_POWER == Type.SUPER_POWER
+end
+
+function is_duplicate(event, controller)
+    for i, card in ipairs(played) do
+        if card:is_copy_of(event.card) then
+            return true
+        end
+    end
+    return false
+end
+
+function event_filter(event, controller)
+    return event.player == controller
+        and is_super_power(event.card)
+        and not is_duplicate(event, controller)
+end
+
+local trigger = self:trigger{
+    type=Event.PLAY,
+    responds=event_filter,
+    activate=function(event, controller)
+        table.insert(played, event.card)
+        self:power(controller, 1)
+    end
+}
+
+self:bind(trigger)

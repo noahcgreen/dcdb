@@ -1,0 +1,13 @@
+---
+name: Doomsday
+type: villain
+color: red
+cost: 6
+vp: 2
+---
+
+local constant_power = self:set_constant_power(4)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)

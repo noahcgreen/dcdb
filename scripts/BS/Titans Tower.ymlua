@@ -1,0 +1,35 @@
+---
+name: Titans Tower
+type: location
+color: violet
+cost: 5
+vp: 1
+---
+
+function cost_matches(card)
+    return card.cost == 2 or card.cost == 3
+end
+
+function is_first_of_type(event)
+    for i, e in ipairs(game.events) do
+        if e == event then return true end
+        if e.type == Event.PLAY and cost_matches(e.card) then
+            return false
+        end
+    end
+    return true
+end
+
+local trigger = self:trigger{
+    type=Event.PLAY,
+    range=Region.IN_PLAY,
+    max_uses=1,
+    responds=function(event, controller)
+        return event.player == controller and cost_matches(event.card) and is_first_of_type(event)
+    end,
+    activate=function(event, controller)
+        controller:draw(1)
+    end
+}
+
+self:ongoing(trigger)

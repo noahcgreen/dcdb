@@ -1,0 +1,21 @@
+starters:
+    Common.Punch: 1
+    Common.Vulnerability: 1
+    Common.Weakness: 1
+    Common.Kick: 1
+    BS.Blue Beetle: 1
+
+kicks:
+    Common.Kick: 16
+
+weaknesses:
+    Common.Weakness: 20
+
+super_villains:
+    top:
+        Common.Weakness: 1
+    middle:
+        BS.Brainiac: 1
+
+main_deck:
+    Common.Kick: 10

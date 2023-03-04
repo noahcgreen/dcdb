@@ -1,0 +1,24 @@
+---
+name: Nth Metal
+type: equipment
+color: gray
+cost: 3
+vp: 1
+---
+
+local constant_power = self:set_constant_power(1)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+
+    local card = player.deck[1]
+    if not card then return end
+    local handle = card:handle()
+    handle:reveal({ player }, player)
+    local options = { 'Yes', 'No' }
+    local choice = player:select(options, false, 'Destroy '..card.name..'?')
+    if choice == options[1] then
+        handle:destroy(player)
+    end
+    handle:release()
+end)

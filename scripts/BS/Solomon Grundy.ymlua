@@ -1,0 +1,27 @@
+---
+name: Solomon Grundy
+type: villain
+color: red
+cost: 6
+vp: 2
+---
+
+local constant_power = self:set_constant_power(3)
+
+local trigger = self:trigger{
+    type=Event.GAIN,
+    preemptive=true,
+    optional=true,
+    responds=function(event, controller)
+        return event.card == self and event.player == controller
+    end,
+    activate=function(event, controller)
+        event.destination = Location(Zone(Region.DECK, controller), 1)
+    end
+}
+
+self:bind(trigger)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)

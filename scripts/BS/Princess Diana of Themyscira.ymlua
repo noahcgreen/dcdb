@@ -1,0 +1,23 @@
+---
+name: Princess Diana of Themyscira
+type: hero
+color: blue
+cost: 7
+vp: 2
+---
+
+function filter(card)
+    return card.type & Type.VILLAIN == Type.VILLAIN and card.cost <= 7
+end
+
+self:on_play(function(player)
+    local villains = {}
+    for i, card in ipairs(game.line_up) do
+        if filter(card) then
+            table.insert(villains, card:handle())
+        end
+    end
+    for i, handle in ipairs(villains) do
+        handle:gain(player)
+    end
+end)

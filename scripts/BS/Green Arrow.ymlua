@@ -1,0 +1,35 @@
+---
+name: Green Arrow
+type: hero
+color: blue
+cost: 5
+vp: 3
+---
+
+function type_matches(card)
+    return card.type & Type.HERO == Type.HERO
+end
+
+function has_heroes(owner)
+    local count = 0
+    for i, card in ipairs(owner.deck) do
+        if card ~= self and type_matches(card) then
+            count = count + 1
+        end
+    end
+    return count >= 4
+end
+
+local constant_power = self:set_constant_power(2)
+
+self:set_star_vp(function(owner)
+    if game.is_over and has_heroes(owner) then
+        return 5
+    else
+        return 0
+    end
+end)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)

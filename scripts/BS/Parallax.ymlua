@@ -1,0 +1,48 @@
+---
+name: Parallax
+type: super_villain
+color: red
+cost: 12
+vp: 6
+---
+
+self:set_faa{
+    individual=function(target, defended)
+        if defended then return end
+
+        for i, card in ipairs(target.hand) do
+            local handle = card:handle()
+            handle:reveal()
+            handle:release()
+        end
+
+        local cards = {}
+        for i, card in ipairs(target.hand) do
+            if card.cost <= 2 then
+                table.insert(cards, card:handle())
+            end
+        end
+        for i, handle in ipairs(cards) do
+            handle:discard(target)
+            handle:release()
+        end
+    end
+}
+
+self:on_play(function(player)
+    game.current_turn.power = game.current_turn.power * 2
+    local trigger = self:trigger{
+        type=Event.POWER,
+        preemptive=true,
+        responds=function(event, controller)
+            return event.player == controller
+        end,
+        activate=function(event, controller)
+            local original_amount = event.amount
+            event.amount = function(player)
+                return original_amount(player) * 2
+            end
+        end
+    }
+    self:bind(trigger, player)
+end)

@@ -1,0 +1,26 @@
+---
+name: Jason Blood
+type: hero
+color: blue
+cost: 7
+vp: 2
+---
+
+local constant_power = self:set_constant_power(3)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+    local villains = {}
+    for i, card in ipairs(player.discard) do
+        if card.type & Type.VILLAIN == Type.VILLAIN then
+            table.insert(villains, card)
+        end
+    end
+    if #villains == 0 then return end
+    local choice = player:select(villains, true, 'You may put a Villain from your discard pile on top of your deck')
+    if choice then
+        local handle = choice:handle()
+        handle:move(Location(Zone(Region.DECK, player), 1))
+        handle:release()
+    end
+end)

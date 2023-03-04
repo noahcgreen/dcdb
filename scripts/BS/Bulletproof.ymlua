@@ -1,0 +1,35 @@
+---
+name: Bulletproof
+type: super_power
+color: orange
+cost: 4
+vp: 1
+---
+
+local constant_power = self:set_constant_power(2)
+
+function cost(event, defender)
+    local handle = self:handle()
+    handle:discard(defender)
+    handle:release()
+end
+
+function reward(event, defender)
+    defender:draw(1)
+    local card = defender:select(defender.discard, true, 'You may destroy a card in your discard pile')
+    if card then
+        local handle = card:handle()
+        handle:destroy(defender)
+        handle:release()
+    end
+end
+
+self:set_defense{
+    range=Region.HAND,
+    cost=cost,
+    reward=reward
+}
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)

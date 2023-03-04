@@ -1,0 +1,26 @@
+---
+name: Ra's al Ghul
+type: super_villain
+color: red
+cost: 8
+vp: 4
+---
+
+local constant_power = self:set_constant_power(3)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+
+    local handle = self:handle()
+    local trigger = self:trigger{
+        type=Event.TURN_END,
+        responds=function(event, controller)
+            return event.player == controller
+        end,
+        activate=function(event, controller)
+            handle:move(controller.deck)
+            handle:release()
+        end
+    }
+    self:bind(trigger, player)
+end)

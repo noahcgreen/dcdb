@@ -1,0 +1,35 @@
+---
+name: Utility Belt
+type: equipment
+color: gray
+cost: 5
+vp: 3
+---
+
+function type_matches(card)
+    return card.type & Type.EQUIPMENT == Type.EQUIPMENT
+end
+
+function has_equipments(owner)
+    local count = 0
+    for i, card in ipairs(owner.deck) do
+        if card ~= self and type_matches(card) then
+            count = count + 1
+        end
+    end
+    return count >= 4
+end
+
+local constant_power = self:set_constant_power(2)
+
+self:set_star_vp(function(owner)
+    if game.is_over and has_equipments(owner) then
+        return 5
+    else
+        return 0
+    end
+end)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)

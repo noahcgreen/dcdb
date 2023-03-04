@@ -1,0 +1,29 @@
+---
+name: Scarecrow
+type: villain
+color: red
+cost: 5
+vp: 1
+---
+
+local constant_power = self:set_constant_power(2)
+
+function resolve_attack(attacker, target, defended)
+    if defended then return end
+
+    local weakness = game.weaknesses[1]
+    if weakness then
+        local handle = weakness:handle()
+        handle:gain(target)
+        handle:release()
+    end
+end
+
+local attack = self:set_attack{
+    individual=resolve_attack
+}
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+    self:attack(player, attack, player.foes)
+end)

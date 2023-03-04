@@ -1,0 +1,25 @@
+---
+name: Hero of the Future
+type: hero
+color: blue
+cost: 4
+vp: 1
+---
+
+local constant_power = self:set_constant_power(2)
+
+function defense_count(player)
+    local defenses = 0
+    for i, event in game.events do
+        if event.type == Event.PLAY and event.player == player and event.card.is_defense then
+            defenses += 1
+        end
+    end
+    return defenses
+end
+
+self:on_play(function(player)
+    self:power(player, function()
+        return 2 + 2 * defense_count(player)
+    end)
+end)

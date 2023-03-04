@@ -1,0 +1,33 @@
+---
+name: Cyborg
+type: super_hero
+---
+
+function type_matches(card, type)
+    return card.type & type == type
+end
+
+local sp_trigger = self:trigger{
+    type=Event.PLAY,
+    max_uses=1,
+    responds=function(event, controller)
+        return event.player == controller and type_matches(event.card, Type.SUPER_POWER)
+    end,
+    activate=function(event, controller)
+        self:power(controller, 1)
+    end
+}
+
+local eq_trigger = self:trigger{
+    type=Event.PLAY,
+    max_uses=1,
+    responds=function(event, controller)
+        return event.player == controller and type_matches(event.card, Type.EQUIPMENT)
+    end,
+    activate=function(event, controller)
+        controller:draw(1)
+    end
+}
+
+self:bind(sp_trigger)
+self:bind(eq_trigger)

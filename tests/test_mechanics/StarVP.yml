@@ -1,0 +1,16 @@
+starters:
+    BS.Green Arrow: 2
+    BS.Kid Flash: 8
+
+kicks:
+    Common.Kick: 16
+
+weaknesses:
+    Common.Weakness: 20
+
+super_villains:
+    middle:
+        Common.Weakness: 10
+
+main_deck:
+    BS.Kid Flash: 5

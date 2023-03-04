@@ -1,0 +1,60 @@
+---
+name: Deathstroke
+type: super_villain
+color: red
+cost: 9
+vp: 5
+---
+
+function type_matches(card, valid)
+    return card.type & valid ~= Type.NONE
+end
+
+local constant_power = self:set_constant_power(3)
+
+self:set_faa{
+    individual=function(target, defended)
+        if defended then return end
+
+        for i, card in ipairs(target.hand) do
+            local handle = card:handle()
+            handle:reveal()
+            handle:release()
+        end
+        local cards = {}
+        for i, card in ipairs(target.hand) do
+            if type_matches(card, Type.HERO | Type.EQUIPMENT | Type.SUPER_POWER) then
+                table.insert(cards, card)
+            end
+        end
+        for i, card in ipairs(target.discard) do
+            if type_matches(card, Type.HERO | Type.EQUIPMENT | Type.SUPER_POWER) then
+                table.insert(cards, card)
+            end
+        end
+        if #cards == 0 then return end
+        local card = target:select(cards, false, 'Destroy a Hero, Equipment, or Super Power')
+        local handle = card:handle()
+        handle:destroy(target)
+        handle:release()
+    end
+}
+
+self:on_play(function(player)
+    local cards = {}
+    for i, card in ipairs(game.line_up) do
+        if type_matches(card, Type.HERO | Type.VILLAIN) then
+            table.insert(cards, card)
+        end
+    end
+    if #cards > 0 then
+        local choice = player:select(cards, true, 'You may gain a Hero or Villain from the Line-Up')
+        if choice then
+            local handle = choice:handle()
+            handle:gain(player)
+            handle:release()
+            return
+        end
+    end
+    self:power(player, constant_power)
+end)

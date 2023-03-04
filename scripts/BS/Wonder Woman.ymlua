@@ -1,0 +1,33 @@
+---
+name: Wonder Woman
+type: super_hero
+---
+
+local villains = 0
+
+local gain_trigger = self:trigger{
+    type=Event.GAIN,
+    -- Need to ensure that the card is a villain before it is gained
+    -- (e.g. Element Woman)
+    preemptive=true,
+    responds=function(event, controller)
+        return event.player == controller and event.card.type & Type.VILLAIN == Type.VILLAIN
+    end,
+    activate=function(event, controller)
+        villains = villains + 1
+    end
+}
+
+local draw_trigger = self:trigger{
+    type=Event.TURN_END,
+    responds=function(event, controller)
+        return event.player == controller
+    end,
+    activate=function(event, controller)
+        controller:draw(villains)
+        villains = 0
+    end
+}
+
+self:bind(gain_trigger)
+self:bind(draw_trigger)

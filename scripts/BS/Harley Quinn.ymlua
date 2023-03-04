@@ -1,0 +1,36 @@
+---
+name: Harley Quinn
+type: villain
+color: red
+cost: 2
+vp: 1
+---
+
+local constant_power = self:set_constant_power(1)
+
+function resolve_attack(attacker, target, defended)
+    if defended then return end
+
+    local starters = {}
+    for i, card in ipairs(target.discard) do
+        if card:has_name('Punch') or card:has_name('Vulnerability') then
+            table.insert(starters, card)
+        end
+    end
+    if #starters > 0 then
+        local card = target:select(starters, false, 'Put a Punch or Vulnerability on top of your deck')
+        local top_of_deck = Location(Zone(Region.DECK, target), 1)
+        local handle = card:handle()
+        handle:move(top_of_deck)
+        handle:release()
+    end
+end
+
+local attack = self:set_attack{
+    individual=resolve_attack
+}
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+    self:attack(player, attack, player.foes)
+end)

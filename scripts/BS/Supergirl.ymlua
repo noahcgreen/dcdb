@@ -1,0 +1,19 @@
+---
+name: Supergirl
+type: hero
+color: blue
+cost: 4
+vp: 1
+---
+
+self:on_play(function(player)
+    if #game.kicks == 0 then return end
+    local options = { 'Yes', 'No' }
+    local choice = player:select(options, false, 'You may gain a Kick to your hand')
+    if choice == options[1] then
+        local kick = game.kicks[1]
+        local handle = kick:handle()
+        handle:gain(player, player.hand)
+        handle:release()
+    end
+end)

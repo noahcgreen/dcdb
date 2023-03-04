@@ -1,0 +1,39 @@
+---
+name: Deadman
+type: hero
+color: blue
+cost: 4
+vp: 1
+---
+
+local constant_power = self:set_constant_power(2)
+
+local trigger = self:trigger{
+    type=Event.GAIN,
+    responds=function(event, controller)
+        return event.card == self and event.player == controller
+    end,
+    activate=function(event, controller)
+        for i = 1, 2 do
+            local choices = {}
+            for _, card in ipairs(controller.hand) do
+                table.insert(choices, card)
+            end
+            for _, card in ipairs(controller.discard) do
+                table.insert(choices, card)
+            end
+            local choice = controller:select(choices, true, 'You may destroy up to two cards in your hand and/or discard pile')
+            if choice then
+                handle = choice:handle()
+                handle:destroy(controller)
+                handle:release()
+            else
+                return
+            end
+        end
+    end
+}
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)

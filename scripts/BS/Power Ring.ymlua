@@ -1,0 +1,25 @@
+---
+name: Power Ring
+type: equipment
+color: gray
+cost: 3
+vp: 1
+---
+
+local constant_power = self:set_constant_power(2)
+
+self:on_play(function(player)
+    local card = player.deck[1]
+    if not card then
+        self:power(player, 2)
+    else
+        local handle = card:handle()
+        handle:reveal(nil, player)
+        handle:release()
+        if card.cost >= 1 then
+            self:power(player, 3)
+        else
+            self:power(player, 2)
+        end
+    end
+end)

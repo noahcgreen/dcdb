@@ -1,0 +1,30 @@
+---
+name: The Riddler
+type: villain
+color: red
+cost: 3
+vp: 1
+---
+
+local constant_power = self:set_constant_power(1)
+
+self:on_play(function(player)
+    local card
+    while #game.main_deck > 0 and game.current_turn.power >= 3 do
+        local options = { 'Yes', 'No' }
+        local choice = player:select(options, false, 'Gain the top card of the Main Deck?')
+        if choice == options[1] then
+            card = game.main_deck[1]
+            player:pay_power(3)
+            local handle = card:handle()
+            handle:gain(player)
+            handle:release()
+        else
+            card = nil
+            break
+        end
+    end
+    if not card then
+        self:power(player, constant_power)
+    end
+end)

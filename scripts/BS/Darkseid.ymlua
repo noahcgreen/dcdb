@@ -1,0 +1,83 @@
+---
+name: Darkseid
+type: super_villain
+color: red
+cost: 11
+vp: 6
+---
+
+function remove(t, value)
+    for i, v in ipairs(t) do
+        if v == value then
+            table.remove(t, i)
+        end
+    end
+end
+
+function get_selection(player)
+    local selection = {}
+    local choices = {}
+    for i, card in ipairs(player.hand) do
+        table.insert(choices, card)
+    end
+    local choice = player:select(choices, true, 'You may destroy two cards in your hand')
+    if not choice then return end
+    table.insert(selection, choice:handle())
+    remove(choices, choice)
+    choice = player:select(choices, false, 'You may destroy two cards in your hand')
+    table.insert(selection, choice:handle())
+    return selection
+end
+
+local constant_power = self:set_constant_power(3)
+
+self:set_faa{
+    individual=function(target, defended)
+        if defended then return end
+
+        local villains = {}
+        for i, card in ipairs(target.hand) do
+            if card.type & Type.VILLAIN == Type.VILLAIN then
+                table.insert(villains, card)
+            end
+        end
+        if #villains > 0 then
+            local card = target:select(villains, true, 'You may reveal a Villain')
+            if card then
+                local handle = card:handle()
+                handle:reveal(nil, target)
+                handle:release()
+                return
+            end
+        end
+        for i = 1, 2 do
+            if #target.hand == 0 then return end
+            local card = target:select(target.hand, false, 'Discard two cards')
+            local handle = card:handle()
+            handle:discard(target)
+            handle:release()
+        end
+    end
+}
+
+self:on_play(function(player)
+    if #player.hand < 2 then
+        self:power(player, 3)
+        return
+    end
+    local selection = get_selection(player)
+    if selection then
+        local destroyed = true
+        for i, handle in ipairs(selection) do
+            destroyed = destroyed and handle:destroy(player)
+            handle:release()
+        end
+        if destroyed then
+            self:power(player, 5)
+        else
+            self:power(player, 3)
+        end
+    else
+        self:power(player, 3)
+    end
+end)

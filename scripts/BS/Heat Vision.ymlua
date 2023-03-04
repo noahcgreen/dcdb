@@ -1,0 +1,27 @@
+---
+name: Heat Vision
+type: super_power
+color: orange
+cost: 6
+vp: 2
+---
+
+local constant_power = self:set_constant_power(3)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+
+    local cards = {}
+    for i, card in ipairs(player.hand) do
+        table.insert(cards, card)
+    end
+    for i, card in ipairs(player.discard) do
+        table.insert(cards, card)
+    end
+    local card = player:select(cards, true,  'You may destroy a card in your hand or discard pile')
+    if card then
+        local handle = card:handle()
+        handle:destroy(player)
+        handle:release()
+    end
+end)

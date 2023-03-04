@@ -1,0 +1,23 @@
+---
+name: Green Arrow's Bow
+type: equipment
+color: gray
+cost: 4
+vp: 1
+---
+
+local constant_power = self:set_constant_power(2)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+
+    local effect = self:alter_price{
+        applies=function(card, controller)
+            return card.type & Type.SUPER_VILLAIN == Type.SUPER_VILLAIN
+        end,
+        price=function(card, controller, current)
+            return current - 2
+        end
+    }
+    self:bind(effect, player)
+end)

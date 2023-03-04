@@ -1,0 +1,28 @@
+---
+name: X-Ray Vision
+type: super_power
+color: orange
+cost: 3
+vp: 1
+---
+
+self:on_play(function(player)
+    local cards = {}
+    for i, foe in ipairs(player.foes) do
+        local card = foe.deck[1]
+        if not card then return end
+        local handle = card:handle()
+        handle:reveal(nil, player)
+        if card.type & Type.LOCATION == Type.NONE then
+            table.insert(cards, card)
+        end
+        handle:release()
+    end
+    local card = player:select(cards, false, 'Select a card to play')
+    if card then
+        local handle = card:handle()
+        handle:play(player)
+        handle:move(Location(Zone(Region.DECK, card.owner), 1))
+        handle:release()
+    end
+end)

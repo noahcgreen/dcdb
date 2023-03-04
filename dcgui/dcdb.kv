@@ -1,0 +1,16 @@
+#:kivy 1.11.1
+
+
+ScreenManager:
+
+    canvas:
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            source: 'dcgui/resources/background.jpg'
+
+    MainMenu:
+        name: 'Main Menu'
+
+    NewGameScreen:
+        name: 'New Game'

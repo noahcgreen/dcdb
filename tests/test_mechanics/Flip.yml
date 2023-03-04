@@ -1,0 +1,21 @@
+characters:
+    BS.Superman
+    BS.Cyborg
+
+starters:
+    BS.Super Strength: 10
+
+kicks:
+    Common.Kick: 16
+
+weaknesses:
+    Common.Weakness: 20
+
+super_villains:
+    top:
+        BS.Ras al Ghul: 1
+    middle:
+        BS.Captain Cold: 1
+
+main_deck:
+    Common.Weakness: 10

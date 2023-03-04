@@ -1,0 +1,28 @@
+---
+name: Robin
+type: hero
+color: blue
+cost: 3
+vp: 1
+---
+
+local constant_power = self:set_constant_power(1)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+
+    local equipments = {}
+    for i, card in ipairs(player.discard) do
+        if card.type & Type.EQUIPMENT == Type.EQUIPMENT then
+            table.insert(equipments, card)
+        end
+    end
+    if #equipments > 0 then
+        local selection = player:select(equipments, false, 'Put an Equipment from discard pile into your hand')
+        if selection then
+            local handle = selection:handle()
+            handle:move(player.hand)
+            handle:release()
+        end
+    end
+end)

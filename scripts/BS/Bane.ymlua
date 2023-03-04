@@ -1,0 +1,28 @@
+---
+name: Bane
+type: villain
+color: red
+cost: 4
+vp: 1
+---
+
+local constant_power = self:set_constant_power(2)
+
+function resolve_attack(attacker, target, defended)
+    if defended then return end
+    if #target.hand > 0 then
+        local card = target:select(target.hand, false, 'Discard a card')
+        local handle = card:handle()
+        handle:discard(target)
+        handle:release()
+    end
+end
+
+local attack = self:set_attack{
+    individual=resolve_attack
+}
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+    self:attack(player, attack, player.foes)
+end)

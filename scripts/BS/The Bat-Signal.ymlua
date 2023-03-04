@@ -1,0 +1,25 @@
+---
+name: The Bat-Signal
+type: equipment
+color: gray
+cost: 5
+vp: 1
+---
+
+local constant_power = self:set_constant_power(1)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+
+    local heroes = {}
+    for i, card in ipairs(player.discard) do
+        if card.type & Type.HERO == Type.HERO then
+            table.insert(heroes, card)
+        end
+    end
+    if #heroes == 0 then return end
+    local card = player:select(heroes, false, 'Put a Hero from your discard pile into your hand')
+    local handle = card:handle()
+    handle:move(player.hand)
+    handle:release()
+end)

@@ -1,0 +1,59 @@
+---
+name: Captain Cold
+type: super_villain
+color: red
+cost: 9
+vp: 5
+---
+
+function has_hero(player)
+    for i, card in ipairs(player.discard) do
+        if card.type & Type.HERO == Type.HERO then
+            return true
+        end
+    end
+    return false
+end
+
+local flipped = {}
+
+local trigger = self:trigger{
+    --range=Region.ALL,
+    type=Event.GAIN,
+    max_uses=1,
+    responds=function(event, controller)
+        return event.card == self and event.player == controller and flipped
+    end,
+    activate=function(event, controller)
+        for i, character in ipairs(flipped) do
+            character:flip_up()
+        end
+        flipped = nil
+    end
+}
+self:bind(trigger)
+
+self:set_faa{
+    individual=function(target, defended)
+        if defended then return end
+
+        for i, character in ipairs(target.characters) do
+            character:flip_down()
+            table.insert(flipped, character)
+        end
+    end
+}
+
+self:set_constant_power(2)
+
+self:on_play(function(player)
+    self:power(player, function(player)
+        local power = 2
+        for i, foe in ipairs(player.foes) do
+            if has_hero(foe) then
+                power = power + 1
+            end
+        end
+        return power
+    end)
+end)

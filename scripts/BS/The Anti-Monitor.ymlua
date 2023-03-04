@@ -1,0 +1,70 @@
+---
+name: The Anti-Monitor
+type: super_villain
+color: red
+cost: 12
+vp: 6
+---
+
+function remove(t, element)
+    local index
+    for i, v in ipairs(t) do
+        if v == element then
+            index = i
+            break
+        end
+    end
+    if not index then return end
+    table.remove(t, index)
+end
+
+local constant_power = self:set_constant_power(2)
+
+self:set_faa{
+    individual=function(target, defended)
+        if defended then return end
+
+        for i, card in ipairs(target.hand) do
+            local handle = card:handle()
+            handle:reveal(nil, target)
+            handle:release()
+        end
+        local cards = {}
+        for i, card in ipairs(target.hand) do
+            if card.cost >= 1 then
+                table.insert(cards, card)
+            end
+        end
+        if #cards > 0 then
+            local card = target:select(cards, false, 'Add a card to the Line-Up')
+            local handle = card:handle()
+            handle:move(game.line_up)
+            handle:release()
+        end
+    end
+}
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+
+    local cards = {}
+    local destroyed = {}
+    for i, card in ipairs(game.line_up) do
+        table.insert(cards, card)
+    end
+    while #cards > 0 do
+        local card = player:select(cards, true, 'You may destroy cards in the Line-Up')
+        if not card then break end
+        remove(cards, card)
+        table.insert(destroyed, card)
+        local handle = card:handle()
+        handle:destroy(player)
+    end
+    for i = 1, #destroyed do
+        local card = game.main_deck[1]
+        if not card then break end
+        local handle = card:handle()
+        handle:move(game.line_up)
+        handle:release()
+    end
+end)

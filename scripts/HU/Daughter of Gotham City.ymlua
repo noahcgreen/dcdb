@@ -1,0 +1,27 @@
+---
+name: Daughter of Gotham City
+type: hero
+color: blue
+cost: 3
+vp: 1
+---
+
+local constant_power = self:set_constant_power(1)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+    for i = 1, 2 do
+        local punches = {}
+        for _, card in ipairs(player.discard) do
+            if card:has_name('Punch') then
+                table.insert(punches, card)
+            end
+        end
+        if #punches == 0 then return end
+        local choice = player:select(punches, true, 'You may put two Punch cards from your discard pile into your hand')
+        if not choice then return end
+        local handle = choice:handle()
+        handle:move(player.hand, { player })
+        handle:release()
+    end
+end)

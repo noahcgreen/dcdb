@@ -1,0 +1,13 @@
+---
+name: Super Strength
+type: super_power
+color: orange
+cost: 7
+vp: 2
+---
+
+local constant_power = self:set_constant_power(5)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)

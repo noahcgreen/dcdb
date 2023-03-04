@@ -1,0 +1,11 @@
+---
+name: Kid Flash
+type: hero
+color: blue
+cost: 2
+vp: 1
+---
+
+self:on_play(function(player)
+    player:draw(1)
+end)

@@ -1,0 +1,18 @@
+characters: {}
+
+starters:
+    BS.Jonn Jonzz: 1
+    Common.Kick: 9
+
+kicks:
+    Common.Kick: 16
+
+weaknesses:
+    Common.Weakness: 20
+
+super_villains:
+    top:
+      BS.Ras al Ghul: 2
+
+main_deck:
+    Common.Weakness: 10

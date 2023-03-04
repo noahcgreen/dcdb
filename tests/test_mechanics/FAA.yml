@@ -1,0 +1,19 @@
+starters:
+    Common.Punch: 1
+    Common.Kick: 1
+    BS.Blue Beetle: 8
+
+kicks:
+    Common.Kick: 16
+
+weaknesses:
+    Common.Weakness: 20
+
+super_villains:
+    top:
+        BS.Ras al Ghul: 1
+    middle:
+        BS.The Anti-Monitor: 1
+
+main_deck:
+    Common.Weakness: 10

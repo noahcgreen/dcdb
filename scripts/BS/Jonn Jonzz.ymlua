@@ -1,0 +1,16 @@
+---
+name: J'onn J'onnz
+type: hero
+color: blue
+cost: 6
+vp: 2
+---
+
+self:on_play(function(player)
+    local sv = game.sv_stack[1]
+    if not (sv and sv:is_visible_to(player)) then return end
+    local handle = sv:handle()
+    handle:play(player)
+    handle:move(Location(Zone(Region.SV_STACK), 1), game.players)
+    handle:release()
+end)

@@ -1,0 +1,17 @@
+starters:
+    BS.Arkham Asylum: 2
+    Common.Kick: 1
+    Common.Weakness: 7
+
+kicks:
+    Common.Kick: 16
+
+weaknesses:
+    Common.Weakness: 20
+
+super_villains:
+    middle:
+        Common.Weakness: 10
+
+main_deck:
+    Common.Weakness: 10

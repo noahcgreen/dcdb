@@ -1,0 +1,23 @@
+---
+name: Super Speed
+type: super_power
+color: orange
+cost: 3
+vp: 1
+---
+
+self:set_defense{
+    range=Region.HAND,
+    cost=function(event, defender)
+        local handle = self:handle()
+        handle:discard()
+        handle:release()
+    end,
+    reward=function(event, defender)
+        defender:draw(2)
+    end
+}
+
+self:on_play(function(player)
+    player:draw(1)
+end)

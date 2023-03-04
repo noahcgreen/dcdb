@@ -1,0 +1,43 @@
+---
+name: Atrocitus
+type: super_villain
+color: red
+cost: 10
+vp: 5
+---
+
+local constant_power = self:set_constant_power(2)
+
+self:set_faa{
+    individual=function(target, defended)
+        if defended or #target.hand == 0 then return end
+
+        local card = target.hand[math.random(#target.hand)]
+        local handle = card:handle()
+        handle:move(target.under_character)
+        self:trigger{
+            type=Event.BUY,
+            responds=function(event, controller)
+                return event.card == self
+            end,
+            activate=function(event, controller)
+                handle:move(Location(Zone(Region.DECK, target), 1))
+                handle:release()
+            end
+        }
+    end
+}
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+
+    local handle
+    for i = 1, 2 do
+        if #player.discard == 0 then break end
+        local card = player:select(player.discard, true, 'You may destroy a card in your discard pile')
+        if not card then break end
+        handle = card:handle()
+        handle:destroy(player)
+        handle:release()
+    end
+end)

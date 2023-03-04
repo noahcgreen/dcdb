@@ -1,0 +1,16 @@
+starters:
+    Common.Kick: 5
+    BS.Fortress of Solitude: 5
+
+kicks:
+    Common.Kick: 16
+
+weaknesses:
+    Common.Weakness: 10
+
+super_villains:
+    middle:
+        Common.Weakness: 10
+
+main_deck:
+    Common.Weakness: 10

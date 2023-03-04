@@ -1,0 +1,78 @@
+---
+name: Dark Knight
+type: hero
+color: blue
+cost: 5
+vp: 1
+---
+
+function gain_equipments(player)
+    local equipments = {}
+    for i, card in ipairs(game.line_up) do
+        if card.type & Type.EQUIPMENT == Type.EQUIPMENT then
+            table.insert(equipments, card)
+        end
+    end
+    for i, card in ipairs(equipments) do
+        local handle = card:handle()
+        handle:gain(player)
+        handle:release()
+    end
+end
+
+function event_filter(event, controller)
+    if event.type ~= Event.GAIN or event.player ~= controller then
+        return false
+    end
+    local zone = event.card.location.zone
+    return zone.player == controller and zone.region == Region.DISCARD_PILE
+end
+
+function get_gained_to_hand(player)
+    local gained = {}
+    for i, event in ipairs(game.events) do
+        if event_filter(event, player) then
+            table.insert(gained, event.card)
+        end
+    end
+    if #gained == 0 then return end
+    local card = player:select(gained, true, 'You may put a card into your hand')
+    if card then
+        local handle = card:handle()
+        handle:move(player.hand)
+        handle:release()
+    end
+end
+
+function has_played_catwoman(player)
+    for i, event in ipairs(game.events) do
+        if event.type == Event.PLAY and event.card:has_name('Catwoman') then
+            return true
+        end
+    end
+    return false
+end
+
+local constant_power = self:set_constant_power(2)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+
+    gain_equipments(player)
+
+    if has_played_catwoman(player) then
+        get_gained_to_hand(player)
+    else
+        local look_ahead = self:trigger{
+            type=Event.PLAY,
+            max_uses=1,
+            responds=function(event, controller)
+                return event.player == controller and event.card:has_name('Catwoman')
+            end,
+            activate=function(event, controller)
+                get_gained_to_hand(controller)
+            end
+        }
+        self:bind(look_ahead, player)
+    end
+end)

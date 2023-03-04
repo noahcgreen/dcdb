@@ -1,0 +1,22 @@
+---
+name: Cheetah
+type: villain
+color: red
+cost: 2
+vp: 1
+---
+
+self:on_play(function(player)
+    local cards = {}
+    for i, card in ipairs(game.line_up) do
+        if card.cost <= 4 then
+            table.insert(cards, card)
+        end
+    end
+    if #cards > 0 then
+        local card = player:select(cards, false, 'Gain a card from the Line-Up')
+        local handle = card:handle()
+        handle:gain(player)
+        handle:release()
+    end
+end)

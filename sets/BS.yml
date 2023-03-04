@@ -1,0 +1,94 @@
+characters:
+    BS.Aquaman
+    BS.Batman
+    BS.Cyborg
+    BS.The Flash
+    BS.Green Lantern
+    BS.Martian Manhunter
+    BS.Superman
+    BS.Wonder Woman
+
+starters:
+    Common.Punch: 7
+    Common.Vulnerability: 3
+
+kicks:
+    Common.Kick: 16
+
+weaknesses:
+    Common.Weakness: 20
+
+super_villains:
+    top:
+        BS.Ras al Ghul: 1
+    middle:
+        BS.The Anti-Monitor: 1
+        BS.Atrocitus: 1
+        BS.Black Manta: 1
+        BS.Brainiac: 1
+        BS.Captain Cold: 1
+        BS.Darkseid: 1
+        BS.Deathstroke: 1
+        BS.The Joker: 1
+        BS.Lex Luthor: 1
+        BS.Parallax: 1
+        BS.Sinestro: 1
+
+main_deck:
+    # Hero
+    BS.Blue Beetle: 1
+    BS.Catwoman: 3
+    BS.Dark Knight: 1
+    BS.Emerald Knight: 1
+    BS.The Fastest Man Alive: 1
+    BS.Green Arrow: 3
+    BS.Green Arrows Bow: 3
+    BS.High-Tech Hero: 3
+    BS.Jonn Jonzz: 1
+    BS.Kid Flash: 4
+    BS.King of Atlantis: 1
+    BS.Man of Steel: 1
+    BS.Mera: 2
+    BS.Princess Diana of Themyscira: 1
+    BS.Robin: 3
+    BS.Supergirl: 2
+    BS.Swamp Thing: 2
+    BS.Zatanna Zatara: 2
+    # Villain
+    BS.Bane: 2
+    BS.Bizarro: 1
+    BS.Cheetah: 2
+    BS.Clayface: 2
+    BS.Doomsday: 2
+    BS.Gorilla Grodd: 2
+    BS.Harley Quinn: 2
+    BS.The Penguin: 2
+    BS.Lobo: 1
+    BS.Poison Ivy: 2
+    BS.The Riddler: 2
+    BS.Scarecrow: 2
+    BS.Solomon Grundy: 2
+    BS.Starro: 1
+    BS.Suicide Squad: 6
+    BS.Two-Face: 2
+    # Super Power
+    BS.Bulletproof: 3
+    BS.Heat Vision: 3
+    BS.Super Speed: 4
+    BS.Super Strength: 3
+    BS.X-Ray Vision: 3
+    # Equipment
+    BS.Aquamans Trident: 3
+    BS.Batmobile: 3
+    BS.The Bat-Signal: 3
+    BS.The Cape and Cowl: 3
+    BS.Lasso of Truth: 3
+    BS.Nth Metal: 4
+    BS.Utility Belt: 3
+    BS.Power Ring: 3
+    # Location
+    BS.Arkham Asylum: 1
+    BS.The Batcave: 1
+    BS.Fortress of Solitude: 1
+    BS.Titans Tower: 1
+    BS.The Watchtower: 1

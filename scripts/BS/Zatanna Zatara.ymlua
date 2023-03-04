@@ -1,0 +1,27 @@
+---
+name: Zatanna Zatara
+type: hero
+color: blue
+cost: 4
+vp: 1
+---
+
+local constant_power = self:set_constant_power(1)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+    for i = 1, 2 do
+        local choices = {}
+        for i, card in ipairs(player.discard) do
+            table.insert(choices, card)
+        end
+        local card = player:select(choices, true, 'You may put two cards on the bottom of your deck')
+        if card then
+            local handle = card:handle()
+            handle:move(player.deck)
+            handle:release()
+        else
+            break
+        end
+    end
+end)

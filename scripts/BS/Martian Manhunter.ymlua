@@ -1,0 +1,50 @@
+---
+name: Martian Manhunter
+type: super_hero
+---
+
+function type_matches(card, type)
+    return card.type & type == type
+end
+
+function count_played(controller, type)
+    local count = 1
+    for i, event in ipairs(game.events) do
+        if event.type == Event.PLAY
+            and event.player == controller
+            and type_matches(event.card, type)
+        then
+            count = count + 1
+        end
+    end
+    return count
+end
+
+local hero_trigger = self:trigger{
+    type=Event.PLAY,
+    max_uses=1,
+    responds=function(event, controller)
+        return event.player == controller
+            and type_matches(event.card, Type.HERO)
+            and count_played(controller, Type.HERO) >= 2
+    end,
+    activate=function(event, controller)
+        self:power(controller, 3)
+    end
+}
+
+local villain_trigger = self:trigger{
+    type=Event.PLAY,
+    max_uses=1,
+    responds=function(event, controller)
+        return event.player == controller
+            and type_matches(event.card, Type.VILLAIN)
+            and count_played(controller, Type.VILLAIN) >= 2
+    end,
+    activate=function(event, controller)
+        self:power(controller, 3)
+    end
+}
+
+self:bind(hero_trigger)
+self:bind(villain_trigger)

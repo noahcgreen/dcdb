@@ -1,0 +1,23 @@
+---
+name: Blue Beetle
+type: hero
+color: blue
+cost: 6
+vp: 2
+---
+
+local constant_power = self:set_constant_power(3)
+
+self:set_defense{
+    range=Region.HAND,
+    cost=function(event, defender)
+        local handle = self:handle()
+        handle:reveal()
+        handle:release()
+    end,
+    reward=function(event, defender) end
+}
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)

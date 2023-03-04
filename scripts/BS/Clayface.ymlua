@@ -1,0 +1,27 @@
+---
+name: Clayface
+type: villain
+color: red
+cost: 4
+vp: 1
+---
+
+function event_filter(event, controller)
+    if event.type ~= Event.PLAY or event.player ~= controller then return false end
+    local zone = event.card.location.zone
+    return zone.region == Region.IN_PLAY and zone.player == controller
+end
+
+self:on_play(function(player)
+    local played = {}
+    for i, event in ipairs(game.events) do
+        if event_filter(event, player) then
+            table.insert(played, event.card)
+        end
+    end
+    if #played == 0 then return end
+    local card = player:select(played, false, 'Select a card to play again')
+    local handle = card:handle()
+    handle:play(player)
+    handle:release()
+end)

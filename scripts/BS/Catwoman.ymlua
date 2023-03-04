@@ -1,0 +1,13 @@
+---
+name: Catwoman
+type: hero
+color: blue
+cost: 2
+vp: 1
+---
+
+local constant_power = self:set_constant_power(2)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)

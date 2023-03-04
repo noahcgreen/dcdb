@@ -1,0 +1,20 @@
+characters:
+    BS.The Flash
+
+starters:
+    BS.The Watchtower: 1
+    BS.Catwoman: 1
+    BS.Kid Flash: 8
+
+kicks:
+    Common.Kick: 16
+
+weaknesses:
+    Common.Weakness: 20
+
+super_villains:
+    middle:
+        Common.Weakness: 10
+
+main_deck:
+    Common.Weakness: 10

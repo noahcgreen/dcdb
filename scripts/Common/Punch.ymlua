@@ -1,0 +1,13 @@
+---
+name: Punch
+type: starter
+color: yellow
+cost: 0
+vp: 0
+---
+
+local constant_power = self:set_constant_power(1)
+
+self:on_play(function(player)
+    self:power(player, constant_power)
+end)

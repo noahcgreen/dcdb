@@ -1,0 +1,24 @@
+---
+name: King of Atlantis
+type: hero
+color: blue
+cost: 5
+vp: 1
+---
+
+self:set_constant_power(1)
+
+self:on_play(function(player)
+    local card = player:select(player.discard, true, 'You may destroy a card in your discard pile')
+    if card then
+        local handle = card:handle()
+        if handle:destroy(player) then
+            self:power(player, 3)
+        else
+            self:power(player, 1)
+        end
+        handle:release()
+    else
+        self:power(player, 1)
+    end
+end)

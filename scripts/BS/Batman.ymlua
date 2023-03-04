@@ -1,0 +1,22 @@
+---
+name: Batman
+type: super_hero
+---
+
+function is_equipment(card)
+    return card.type & Type.EQUIPMENT == Type.EQUIPMENT
+end
+
+function event_filter(event, controller)
+    return event.player == controller and is_equipment(event.card)
+end
+
+local trigger = self:trigger{
+    type=Event.PLAY,
+    responds=event_filter,
+    activate=function(event, controller)
+        self:power(controller, 1)
+    end
+}
+
+self:bind(trigger)

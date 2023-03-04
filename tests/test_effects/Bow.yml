@@ -1,0 +1,17 @@
+starters:
+    BS.Super Strength: 3
+    BS.Green Arrows Bow: 2
+    Common.Weakness: 5
+
+kicks:
+    Common.Kick: 16
+
+weaknesses:
+    Common.Weakness: 20
+
+super_villains:
+    middle:
+        BS.Ras al Ghul: 2
+
+main_deck:
+    Common.Kick: 10
